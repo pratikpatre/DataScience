@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "install.packages(\"rvest\")\ninstall.packages(\"rPython\")\nlibrary(rvest)\nlibrary(dplyr)\nlibrary(readr)\nlibrary(stringr)\n\n\ndir.create(\"Part1_Files\")\n\nsink(file = \"Part1_log.txt\")\nfile_path_input <- paste(getwd(),\"/input_append.csv\", sep = \"\")\nfile_read <- read_csv(file_path_input)\ncik <- c()\nacc <- c()\nfor (i in 1:length(file_read)){\n  if( toupper(file_read$Processing[i]) == 'Y'){\n    cik <- file_read$CIK[i]\n    acc <- file_read$Accession[i]\n  }\n}\n\nname <- c()\nprint(paste(Sys.time(),\"Fetching Master List for CIK\",sep=\" \"))\ntemp <- tempfile()\ndownload.file(\"https://www.sec.gov/edgar/NYU/cik.coleft.c\",temp)\ncik_list <- unlist(readLines(temp))\n\nfor (i in 1:length(cik_list)){\n  if (grepl(cik,cik_list[i])){\n    name <- unlist(strsplit(cik_list[i],\":\"))\n  }\n}\n\nfilename <- gsub(\" \", \"_\", name[1])\nfield1 = substr(cik,regexpr(\"[^0]\",cik),nchar(cik)) \nfield2 = unlist(strsplit(acc,\"-\"))\nprint(paste(Sys.time(),\"Generating files for CIK : \",field1,\" and name : \",name[1],sep=\" \"))\n\ncreate_url_1 <- paste(\"https://www.sec.gov/Archives/edgar/data/\",field1,\"/\",field2[1],field2[2],field2[3],\"/\",field2[1],\"-\",field2[2],\"-\",field2[3],\"-index.html\",sep = \"\")       \nurl_accession <- read_html(create_url)\nurl_accession %>% html_nodes(xpath = './/*[@id=\"formDiv\"]/div/table') %>% .[[1]] %>% html_table(fill = TRUE) -> testTable\n\nfor (i in 1:length(testTable)){\n  if (testTable$Description[i] == \"10-Q\"){\n    field3 <- testTable$Document[i]\n  }\n  if(testTable$Description[i] == \"FORM 10-K\"){\n    field3 <- testTable$Document[i]\n  }\n}\n\nprint(paste(Sys.time(),\"Fetching from \",field1,\" and name : \",name[1],sep=\" \"))\n\ncreate_url_2 <- paste(\"https://www.sec.gov/Archives/edgar/data/\",field1,\"/\",field2[1],field2[2],field2[3],\"/\",field3,sep = \"\")\n\nurl1<- c()\nurl1 <- read_html(create_url_2)\n\nif (is.null(url1)){\n  url1 <- read_html(\"https://www.sec.gov/Archives/edgar/data/51143/000005114313000007/ibm13q3_10q.htm\")\n  print (\"Please enter valid CIK and Aaccession key. The default url is taken into consideration now and i.e. - https://www.sec.gov/Archives/edgar/data/51143/000005114313000007/ibm13q3_10q.htm\")\n}\n\nurl1 %>% html_nodes(\"table\") -> totalTable\nlength(totalTable) -> len\ncount <- 0\nfor (i in 1:(len)){\n  url1 %>% html_nodes(\"table\") %>% .[[i]] %>% html_table(fill = TRUE) -> testTable\n  testinsert <- testTable\n  bool <- FALSE\n  k <- 0\n  colm <- c()\n  for (j in testTable){\n    k <- k+1\n    bool1 <- TRUE\n    if(any(grepl('\\\\$',j))){\n      if(!any(grepl('\\\\$[0-9_]+',j))){\n        bool <- TRUE\n        colm <- c(colm,k)\n        bool1 <- FALSE\n      }\n    }\n    if(colSums(is.na(data.frame(j)))>1){\n      colm <- c(colm,k)\n    }\n    if(((sum(grepl('^\\\\s+$|^$',j)) / length(j))*100 ) > 80 & bool1){\n      colm <- c(colm,k)\n    }\n  }\n  if (bool){\n    count <- count+1\n    testinsert <- testinsert[-c(colm)]\n    path_file <- getwd()\n    var <- paste(path_file,\"/Part1_Files/\",filename,\"_\",count,\".csv\",sep=\"\")\n    print(paste(Sys.time(),\"Generating file : \",var,sep=\" \"))\n    write.csv(testinsert,var)\n  }\n}\n\ndir('Part1_Files')\nfiles2zip <- dir('Part1_Files', full.names = TRUE)\nzip(zipfile = 'Team3_Zip', files = files2zip)\n\nsink()\n\n",
+    "created" : 1488253314586.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3544844989",
+    "id" : "404A134C",
+    "lastKnownWriteTime" : 1488253417,
+    "last_content_update" : 1488253417945,
+    "path" : "~/Desktop/ADS/Question1/question1_part1.R",
+    "project_path" : "question1_part1.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
