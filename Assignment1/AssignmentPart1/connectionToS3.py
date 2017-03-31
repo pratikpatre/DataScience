@@ -4,8 +4,8 @@ import sys
 from boto.s3.key import Key
 import glob
 
-AWS_ACCESS_KEY_ID = 'AKIAIQJWJZP2CLKCC3QQ'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = Access key
+AWS_SECRET_ACCESS_KEY = Password
 TeamNumber='team3'
 
 bucket_name = TeamNumber+ '-ads-assignment-1'
