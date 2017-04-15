@@ -23,12 +23,12 @@ except Exception as e:
     
 #uploading multiple files
 filenames=[]
-filenames =glob.glob(".\\'zip_"+str(CIK)+".zip")
-filenames.append("input_append.csv")
-filenames.append("Team3_Zip.zip")
-filenames.append(“logFile.txt”)
-filenames.append(“Report.pdf”)
-filenames.append(“big.xlsx”)
+#filenames =glob.glob(".\\'zip_"+str(CIK)+".zip")
+#filenames.append("input_append.csv")
+#filenames.append("Team3_Zip.zip")
+#filenames.append(“logFile.txt”)
+#filenames.append(“Report.pdf”)
+filenames.append(“QUESTION 1.docx”)
 
 
 def percent_cb(complete, total):

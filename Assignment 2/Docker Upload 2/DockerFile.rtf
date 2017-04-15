@@ -1,0 +1,66 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf810
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red255\green255\blue255;\red16\green60\blue192;
+\red101\green71\blue146;}
+{\*\expandedcolortbl;;\cssrgb\c13333\c13333\c13333;\cssrgb\c100000\c100000\c100000;\cssrgb\c6667\c33333\c80000;
+\cssrgb\c47451\c36471\c63922;}
+\margl1440\margr1440\vieww28600\viewh16500\viewkind0
+\deftab720
+\pard\pardeftab720\sl300\partightenfactor0
+
+\f0\fs25\fsmilli12800 \cf2 \cb3 \expnd0\expndtw0\kerning0
+FROM python:3\
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb1 \
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb3 USER root\
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb1 \
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb3 ADD Assignment2_luigi_file2.py Assignment2_luigi_file2.py\
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb1 \
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb3 RUN apt-get update && \\\
+\'a0 \'a0 apt-get clean && \\\
+\'a0 \'a0 \'a0 \'a0 rm -rf /var/lib/apt/lists/*\
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb1 \
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb3 	USER $NB_USER\
+\'a0 \'a0\'a0\
+\'a0 \'a0 # Install Python 3 packages\
+	# Remove pyqt and qt pulled in for matplotlib since we're only ever going to\
+	# use notebook-friendly backends in these images\
+	RUN pip install boto\
+	RUN pip install luigi\
+	RUN pip install urllib3\
+	RUN	pip install bs4\
+	RUN pip install requests\
+	RUN pip install numpy\
+	RUN pip install pandas\
+	RUN	pip install lxml\
+	RUN	pip install zipfile\
+	RUN	pip install io\
+	RUN	pip install os\
+	RUN	pip install glob\
+	RUN	pip install sys\
+	RUN	pip install datetime\
+	RUN	pip install time\
+	RUN	pip install seaborn\'a0\
+	\
+	#RUN	pip install sklearn\
+	#RUN	pip install scipy\
+	#RUN	pip install {\field{\*\fldinst{HYPERLINK "https://github.com/pybrain/pybrain/archive/0.3.3.zip"}}{\fldrslt \cf4 \ul \ulc4 https://github.com/pybrain/pybrain/archive/0.3.3.zip}}\
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb1 \
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb3 #RUN pip install pystrich\
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb1 \
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \cb3 CMD [ "python", "./Assignment2_luigi_file2.py\'94, "
+\f1\fs24 \cf5 \cb1 UploadToS3
+\f0\fs25\fsmilli12800 \cf2 \cb3 ", "--local-scheduler", "--awsKey", "AKIAIKKVCJ2BT52MZHAA", "--awsSecret","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" ]\
+\
+}
